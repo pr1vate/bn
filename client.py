@@ -45,7 +45,6 @@ class bCli(object):
 		self.message = str(message)
 	
 		while True:
-		
 			if self.command in IRC_ACTIONS_1:
 				self.sock.send("%s %s :%s\r\n" % (self.command, self.channel, self.message))
 				break
@@ -78,16 +77,9 @@ class bCli(object):
 						msg = msg.split()[1:]
 						msg = ' '.join(str(x) for x in msg)
 						self._send("PRIVMSG", "[+] New command added to queue: %s" % (msg))
-						
-					
-					
-					
-					#self._send("PRIVMSG", "[*] Command Received: %s" % (msg))
-					#if a.find("!cmd"):
-					#a = msg.split()[1:]
-                    #command = ''.join(str(x) for x in a)
-					
-					#print "[COMMAND]: %s running on bot" % (command)
+						#
+						# self._exec(blah bleh)
+						#
 												
 			except ValueError:
 				pass
@@ -102,10 +94,7 @@ class bCli(object):
 				if i == self.sock:
 					buffer = i.recv(IRC_BUFFER)
 					self._recv(buffer)
-		
-
-
-	
+			
 	def _exec(self, command=[]):
 		self.cmd = command
 		print "Command: %s" % (self.cmd)
