@@ -100,7 +100,7 @@ class bCli(object):
 			p = subprocess.Popen(self.cmd, shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 			for line in p.stdout:
 				line_num += 1
-				self._send("PRIVMSG", "    [Line %d] %s" % (line_num, line))
+				self._send("PRIVMSG", "--[%3d] %s" % (line_num, line))
 			p.wait()
 		except subprocess.CalledProcessError:	
 			print "Error calling command: %s" % (self.cmd)
@@ -109,4 +109,4 @@ class bCli(object):
 # ------------
 #
 a=bCli("irc.blackcatz.org", 6697)
-a._connect("#howtohack")
+a._connect("#x0fsec")
